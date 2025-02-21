@@ -52,8 +52,8 @@ A minimalist Flutter-based Todo List application implementing core task manageme
 
 ## Project Structure
 lib/
-├── controller/      # State management
-├── model/           # Data models
-├── services/        # Local storage & auth
-├── view/            # UI screens
-└── widgets/         # Reusable components
+├── controller/      # State management  
+├── model/           # Data models  
+├── services/        # Local storage & auth  
+├── view/            # UI screens  
+└── widgets/         # Reusable components  
