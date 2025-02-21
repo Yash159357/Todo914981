@@ -57,3 +57,19 @@ lib/
 ├── services/        # Local storage & auth  
 ├── view/            # UI screens  
 └── widgets/         # Reusable components  
+
+## 📦 Dependencies
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| [flutter](https://flutter.dev) | SDK | Core framework for cross-platform development |
+| [cupertino_icons](https://pub.dev/packages/cupertino_icons) | ^1.0.2 | iOS-style icons and visual elements |
+| [flutter_bloc](https://pub.dev/packages/flutter_bloc) | ^9.0.0 | State management using BLoC pattern |
+| [go_router](https://pub.dev/packages/go_router) | ^13.1.0 | Declarative routing and navigation |
+| [firebase_auth](https://pub.dev/packages/firebase_auth) | ^4.16.0 | User authentication with Firebase |
+| [firebase_core](https://pub.dev/packages/firebase_core) | ^2.24.2 | Firebase core functionality |
+| [cloud_firestore](https://pub.dev/packages/cloud_firestore) | ^4.14.0 | Cloud database operations |
+| [intl](https://pub.dev/packages/intl) | ^0.19.0 | Date/time formatting & internationalization |
+| [uuid](https://pub.dev/packages/uuid) | ^4.2.2 | Unique ID generation for tasks |
+| [shared_preferences](https://pub.dev/packages/shared_preferences) | ^2.2.2 | Local storage persistence |
+| [flutter_launcher_icons](https://pub.dev/packages/flutter_launcher_icons) | ^0.13.1 | App icon generation tooling |
