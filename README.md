@@ -51,7 +51,7 @@ A minimalist Flutter-based Todo List application implementing core task manageme
 3. **flutter run**
 
 ## Project Structure
-lib/
+lib/  
 ├── controller/      # State management  
 ├── model/           # Data models  
 ├── services/        # Local storage & auth  
