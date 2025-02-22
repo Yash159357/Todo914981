@@ -132,8 +132,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       );
                                     }
                                     if (mounted) {
-                                      context.pop();
-                                      context.goNamed('home');
+                                      context.pushReplacementNamed('intro');
                                     }
                                   } catch (e) {
                                     // Handle errors
