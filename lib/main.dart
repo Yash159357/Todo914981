@@ -8,13 +8,14 @@ import 'package:todoapp/firebase_options.dart';
 import 'package:flutter/services.dart';
 import 'package:todoapp/view/auth/auth.dart';
 import 'package:todoapp/view/home/home.dart';
+import 'package:todoapp/view/intro/introduction_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   // Get initial auth state
   final auth = FirebaseAuth.instance;
   final initialLocation = auth.currentUser != null ? "/home" : "/auth";
@@ -23,6 +24,13 @@ void main() async {
   final _router = GoRouter(
     initialLocation: initialLocation,
     routes: [
+      GoRoute(
+        path: "/intro",
+        name: "intro",
+        builder: (context, state) {
+          return const IntroScreen();
+        },
+      ),
       GoRoute(
         path: "/auth",
         name: "auth",
@@ -40,10 +48,10 @@ void main() async {
 
       // Redirect to auth if not logged in
       if (currentUser == null && !isAuthRoute) return "/auth";
-      
+
       // Redirect to home if logged in and trying to access auth
       if (currentUser != null && isAuthRoute) return "/home";
-      
+
       // No redirect needed
       return null;
     },
@@ -67,7 +75,7 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   final GoRouter router;
-  
+
   const MyApp({super.key, required this.router});
 
   @override
@@ -79,7 +87,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    
+
     // Listen for auth state changes
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
