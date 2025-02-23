@@ -6,7 +6,7 @@ class TaskCard extends StatelessWidget {
   final Task task;
   final VoidCallback? onDismissed;
 
-  const TaskCard({Key? key, required this.task, this.onDismissed})
+  const TaskCard({Key? key, required this.task, required this.onDismissed})
       : super(key: key);
 
   Color _getStatusColor(BuildContext context) {

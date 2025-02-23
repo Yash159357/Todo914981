@@ -22,14 +22,15 @@ class TaskListCubit extends Cubit<List<Task>> {
   void addTask(Task task) async {
     final updatedTasks = List<Task>.from(state)..add(task);
     emit(updatedTasks);
-    await _saveTasks(); // Immediate save after state change
+    await TaskStorageService.saveTasks(updatedTasks);
   }
 
   // ****************** Delete Task with Auto-Save ********************
   void deleteTask(String id) async {
-    final updatedTasks = state.where((task) => task.id != id).toList();
+    final updatedTasks = state.where((task) => !(task.id == id)).toList();
+    print(updatedTasks);
     emit(updatedTasks);
-    await _saveTasks(); // Immediate save after state change
+    await TaskStorageService.saveTasks(updatedTasks);
   }
 
   // ****************** Update Task with Auto-Save ********************
@@ -37,7 +38,7 @@ class TaskListCubit extends Cubit<List<Task>> {
     final updatedTasks = state.map((task) {
       return task.id == updatedTask.id ? updatedTask : task;
     }).toList();
-    
+
     emit(updatedTasks);
     await _saveTasks(); // Immediate save after state change
   }

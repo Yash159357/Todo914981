@@ -12,6 +12,7 @@ import 'package:todoapp/widgets/greeting_card.dart';
 import 'package:todoapp/widgets/task_card.dart';
 import 'package:todoapp/widgets/task_segment.dart';
 import 'package:todoapp/view/home/task_view/task_details.dart';
+import 'package:todoapp/services/storage.dart';
 
 enum BottomTab { home, tasks, profile }
 
@@ -27,18 +28,18 @@ class HomeScreenState extends State<HomeScreen> {
   BottomTab _currentTab = BottomTab.home;
   TaskFilter _selectedFilter = TaskFilter.today;
 
-  List<Task> _allTasks = [];
+  // List<Task> _allTasks = [];
 
   @override
   void initState() {
     super.initState();
     // ******************* set data in alltasks *********************
-    _allTasks = context.read<TaskListCubit>().state;
-    context.read<TaskListCubit>().stream.listen((tasks) {
-      setState(() {
-        _allTasks = tasks;
-      });
-    });
+    // _allTasks = context.read<TaskListCubit>().state;
+    // context.read<TaskListCubit>().stream.listen((tasks) {
+    //   setState(() {
+    //     _allTasks = tasks;
+    //   });
+    // });
   }
 
   @override
@@ -48,13 +49,13 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   // ************* filtering tasks as per task switcher ******************
-  List<Task> get _filteredTasks {
+  List<Task> _filteredTasks(List<Task> state) {
     DateTime now = DateTime.now();
     switch (_selectedFilter) {
       case TaskFilter.completed:
-        return _allTasks.where((task) => task.completed).toList();
+        return state.where((task) => task.completed).toList();
       case TaskFilter.today:
-        return _allTasks
+        return state
             .where((task) =>
                 task.dueDate.year == now.year &&
                 task.dueDate.month == now.month &&
@@ -62,7 +63,7 @@ class HomeScreenState extends State<HomeScreen> {
                 !task.completed)
             .toList();
       case TaskFilter.pending:
-        return _allTasks
+        return state
             .where((task) =>
                 !task.completed &&
                 (task.dueDate.isAfter(now) && task.dueDate.day != now.day))
@@ -82,7 +83,7 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(List<Task> state) {
     if (_currentTab == BottomTab.home) {
       return SingleChildScrollView(
         child: Column(
@@ -97,6 +98,7 @@ class HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 8),
             Divider(color: Colors.grey.shade300, endIndent: 10, indent: 10),
             const SizedBox(height: 4),
+
             TaskSegmentedControl(
               selectedFilter: _selectedFilter,
               onFilterChanged: _onFilterChanged,
@@ -105,11 +107,13 @@ class HomeScreenState extends State<HomeScreen> {
             ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: _filteredTasks.length,
+              itemCount: _filteredTasks(state).length,
               itemBuilder: (context, index) {
+                var task = _filteredTasks(state)[index];
+
                 return GestureDetector(
                   onTap: () {
-                    var task = _filteredTasks[index];
+                    // var task = _filteredTasks(state)[index];
                     showTaskDetailsModal(
                       context: context,
                       task: task,
@@ -134,7 +138,15 @@ class HomeScreenState extends State<HomeScreen> {
                     );
                   },
                   child: TaskCard(
-                    task: _filteredTasks[index],
+                    task: _filteredTasks(state)[index],
+                    onDismissed: () {
+                        // Delete the task.
+                        setState(() {
+                          context.read<TaskListCubit>().deleteTask(task.id);
+                          // TaskStorageService.saveTasks(_allTasks);
+                          // context.pop();
+                        });
+                      },
                   ),
                 );
               },
@@ -213,7 +225,10 @@ class HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: SafeArea(
-        child: _buildBody(),
+        child:
+            BlocBuilder<TaskListCubit, List<Task>>(builder: (context, state) {
+          return _buildBody(state);
+        }),
       ),
     );
   }
